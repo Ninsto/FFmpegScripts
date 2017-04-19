@@ -7,7 +7,7 @@ cd Temp # Changes directory to Temp.
 cat files.txt | sed 's/^..//' > fileswithoutdot.txt # This removes the dots from the start of every line in files.txt and outputs fileswithoutdot.txt
 cat fileswithoutdot.txt | sed -e "s#^#$origfolderdirectory#g" > prefixfiles.txt # This adds the original folder name to the start of each line in fileswithoutdot.txt and outputs to prefixfiles.txt
 cat prefixfiles.txt | sed -e "s#$origfoldername#Encoded./$origfoldername./#" # This adds ../Encoded. to the start of every line in prefixfiles.txt and outputs to prefixedfiles.txt
-OUTPUT="$(rr prefixedfiles.txt)" # Reads out prefixedfiles.txt for FFMPEG.
+OUTPUT="$(copythenencoderr prefixedfiles.txt)" # Reads out prefixedfiles.txt for FFMPEG.
 cd ../ # Backs out of Temp folder
 find . -type d -exec mkdir -p -- ../Encoded./$origfoldername{} \; # Copies folder structure of $origfoldername to ../Encoded.
 rm -r ../Encoded./$origfoldername./Temp # Removes temp folder from ../Encoded
