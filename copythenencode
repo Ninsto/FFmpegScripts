@@ -1,0 +1,15 @@
+#!/bin/bash
+origfolderdirectory=${PWD} # This is the original folder directory path.
+origfoldername=${PWD##*/} # This is the original folder name.
+mkdir -p Temp # This creates a temp folder where all the temporary files will stay.
+find . -name "*.mp4" >> ./Temp/files.txt # This grabs a list of all .mp4 files and puts the output into files.txt
+cd Temp
+cat files.txt | sed 's/^..//' > fileswithoutdot.txt # This removes the dots from the start of every line in files.txt and outputs fileswithoutdot.txt
+cat fileswithoutdot.txt | sed -e "s#^#$origfolderdirectory#g" > prefixfiles.txt # This adds the original folder name to the start of each line in fileswithoutdot.txt and outputs to prefixfiles.txt
+cat prefixfiles.txt | sed -e "s#$origfoldername#Encoded./$origfoldername./#" # This adds ../Encoded. to the start of every line in prefixfiles.txt and outputs to prefixedfiles.txt
+OUTPUT="$(rr prefixedfiles.txt)" # Reads out prefixedfiles.txt for FFMPEG.
+cd ../ # Backs out of Temp folder
+find . -type d -exec mkdir -p -- ../Encoded./$origfoldername{} \; # Copies folder structure of $origfoldername to ../Encoded.
+rm -r ../Encoded./$origfoldername./Temp # Removes temp folder from ../Encoded
+# Do Encode
+find . -name *.mp4 -exec ffmpeg -i {} -vcodec libx264 -acodec copy -threads 10 -crf 18 "${OUTPUT}" \;
