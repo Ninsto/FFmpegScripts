@@ -1,0 +1,15 @@
+Copy then Encode Concept
+On Script Run
+Vars:
+folderrun = The folder that the script was run in.
+folderrundirectory = The complete directory to the folder that the script was run in.
+Steps:
+1. Copy Folder Structure to a folder outside of the folder that the script was run in called Encoded.
+2. Grab list of requested Media Format's Directory from the Original Folder Directory.
+3. Add to input.txt
+4. Add ../Encoded/$folderrun to start of each line in input.txt then output to output.txt.
+5. Use Josh's System for FFmpeg input.
+6. Use a modified version of Josh's batch system that feeds in output.txt line by line into FFmpeg output.
+7. FFmpeg encode options "-vcodec libx264 -acodec libfdk_aac -crf 18"
+8. Clean-up input.txt and output.txt
+9. Read "Done Encoding!"
