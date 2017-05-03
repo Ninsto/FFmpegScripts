@@ -15,4 +15,4 @@ prefixedfiles=$(cat ./Temp/prefixedfiles.txt)
 echo "$files" >> generatedscript
 sed -e 's/^/ffmpeg -i /' generatedscript >> generatedscript2
 sed 's/$/ -vcodec libx264 -acodec copy -threads 10 -crf 18 /' >> generatedscript2
-printf "$prefixedfiles"
+echo "$prefixedfiles"
