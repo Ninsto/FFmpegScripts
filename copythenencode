@@ -10,9 +10,4 @@ cat prefixfiles.txt | sed -e "s#$origfoldername#Encoded./$origfoldername./#" > p
 cd ../ # Backs out of Temp folder
 find . -type d -exec mkdir -p -- ../Encoded./$origfoldername{} \; # Copies folder structure of $origfoldername to ../Encoded.
 rm -r ../Encoded./$origfoldername./Temp # Removes temp folder from ../Encoded
-files=$(cat ./Temp/files.txt)
-prefixedfiles=$(cat ./Temp/prefixedfiles.txt)
-echo "$files" >> generatedscript
-sed -e 's/^/ffmpeg -i /' generatedscript >> generatedscript2
-sed 's/$/ -vcodec libx264 -acodec copy -threads 10 -crf 18 /' >> generatedscript2
-echo "$prefixedfiles"
+./boo
