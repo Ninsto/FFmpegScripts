@@ -1,0 +1,23 @@
+#!/bin/bash
+origfolderdirectory=${PWD} # This is the original folder directory path.
+origfoldername=${PWD##*/} # This is the original folder name.
+mkdir -p Temp # This creates a temp folder where all the temporary files will stay.
+find . -name "*.mp4" >> ./Temp/files.txt
+find . -name "*.mkv" >> ./Temp/files.txt
+cd Temp # Changes directory to Temp.
+cat files.txt | sed 's/^..//' > fileswithoutdot.txt # This removes the dots from the start of every line in files.txt and outputs fileswithoutdot.txt
+cat fileswithoutdot.txt | sed -e "s#^#$origfolderdirectory#g" > prefixfiles.txt # This adds the original folder name to the start of each line in fileswithoutdot.txt and outputs to prefixfiles.txt
+cat prefixfiles.txt | sed -e "s#$origfoldername#Encoded./$origfoldername./#" > prefixedfiles.txt # This adds ../Encoded. to the start of every line in prefixfiles.txt and outputs to prefixedfiles.txt
+cat prefixedfiles.txt | sed 's/$/"/' > prefixedfiles1.txt
+cat prefixedfiles1.txt | sed -e 's/^/"/' > prefixedfiles2.txt
+cat files.txt | sed 's/$/"/' > files2.txt
+cat files2.txt | sed -e 's/^/"/' > files3.txt
+cd ../ # Backs out of Temp folder
+find . -type d -exec mkdir -p -- ../Encoded./$origfoldername{} \; # Copies folder structure of $origfoldername to ../Encoded.
+rm -r ../Encoded./$origfoldername./Temp # Removes temp folder from ../Encoded
+./gen # Generates "GeneratedScript"
+echo "Script Generated!" # Prints the words "Script Generated!"
+echo "Cleaning up Temporary Files" | rm -r ./Temp # Prints "Cleaning up Temporary Files then Removes Temp"
+sleep 2
+echo "Running Script!"
+./GeneratedScript
