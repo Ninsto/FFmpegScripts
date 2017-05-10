@@ -2,74 +2,20 @@
 origfolderdirectory=${PWD} # This is the original folder directory path.
 origfoldername=${PWD##*/} # This is the original folder name.
 mkdir -p Temp # This creates a temp folder where all the temporary files will stay.
-PS3='Please enter your container to search for: '
-options=("MKV" "MP4" "MP2" "All of the Above" "Custom" "Quit")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "MKV")
-            find . -name "*.mkv" >> ./Temp/files.txt
-            ;;
-        "MP4")
-            find . -name "*.mp4" >> ./Temp/files.txt
-            ;;
-        "MP2")
-            find . -name "*.mp2" >> ./Temp/files.txt
-            ;;
-        "All of the Above")
-            find . -name "*.mkv" >> ./Temp/files.txt
-            find . -name "*.mp4" >> ./Temp/files.txt
-            find . -name "*.mp2" >> ./Temp/files.txt
-            ;;
-        "Custom")
-            clear
-            echo "NOTE: Don't put a . before it. It will cause the find command to error."
-            echo "If your container "
-            read -p "Enter container: " container
-            find . -name "*.$container" >> ./Temp/files.txt
-            ;;
-        "Quit")
-            break
-            ;;
-        *) echo invalid option;;
-    esac
-done
 cd Temp # Changes directory to Temp.
 cat files.txt | sed 's/^..//' > fileswithoutdot.txt # This removes the dots from the start of every line in files.txt and outputs fileswithoutdot.txt
 cat fileswithoutdot.txt | sed -e "s#^#$origfolderdirectory#g" > prefixfiles.txt # This adds the original folder name to the start of each line in fileswithoutdot.txt and outputs to prefixfiles.txt
 cat prefixfiles.txt | sed -e "s#$origfoldername#Encoded./$origfoldername./#" > prefixedfiles.txt # This adds ../Encoded. to the start of every line in prefixfiles.txt and outputs to prefixedfiles.txt
+cat prefixedfiles.txt | sed 's/$/"/' > prefixedfiles1.txt
+cat prefixedfiles1.txt | sed -e 's/^/"/' > prefixedfiles2.txt
+cat files.txt | sed 's/$/"/' > files2.txt
+cat files2.txt | sed -e 's/^/"/' > files3.txt
 cd ../ # Backs out of Temp folder
 find . -type d -exec mkdir -p -- ../Encoded./$origfoldername{} \; # Copies folder structure of $origfoldername to ../Encoded.
 rm -r ../Encoded./$origfoldername./Temp # Removes temp folder from ../Encoded
 ./gen # Generates "GeneratedScript"
 echo "Script Generated!" # Prints the words "Script Generated!"
-echo "Do you want me to clean up temporary files?" # Prints "Do you want me to clean up temporary files?"
-function yes_or_no {                               
-    while true; do                                 
-        read -p "$* [y/n]: " yn                    
-        case $yn in                                
-            [Yy]*) rm -r ./Temp  ;;                # Removes the Temp folder.
-            [Nn]*) echo "Aborted" ; return  1 ;;   # Prints "Aborted" and continues on script.
-        esac                                       
-    done                                           
-}
-echo "Would you like me to make the script executable?"
-function yes_or_no {
-    while true; do
-        read -p "$* [y/n]: " yn
-        case $yn in
-            [Yy]*) chmod +x GeneratedScript  ;;  
-            [Nn]*) echo "Aborted" ; return  1 ;;
-        esac
-    done
-}
-echo "Would you like me to run it?"
-function yes_or_no {
-    while true; do
-        read -p "$* [y/n]: " yn
-        case $yn in
-            [Yy]*) ./ScriptGenerated  ;;  
-            [Nn]*) echo "Aborted" ; return  1 ;;
-        esac
-    done
-}
+echo "Cleaning up Temporary Files" | rm -r ./Temp # Prints "Cleaning up Temporary Files then Removes Temp"
+sleep 2
+echo "Running Script!"
+./GeneratedScript
