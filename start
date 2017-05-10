@@ -2,6 +2,7 @@
 origfolderdirectory=${PWD} # This is the original folder directory path.
 origfoldername=${PWD##*/} # This is the original folder name.
 mkdir -p Temp # This creates a temp folder where all the temporary files will stay.
+find . -name "*.mp4" >> ./Temp/files.txt
 cd Temp # Changes directory to Temp.
 cat files.txt | sed 's/^..//' > fileswithoutdot.txt # This removes the dots from the start of every line in files.txt and outputs fileswithoutdot.txt
 cat fileswithoutdot.txt | sed -e "s#^#$origfolderdirectory#g" > prefixfiles.txt # This adds the original folder name to the start of each line in fileswithoutdot.txt and outputs to prefixfiles.txt
