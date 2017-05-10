@@ -1,5 +1,8 @@
 # FFmpeg Scripts
 Scripts to do with FFmpeg.
 
+# Scripts
+****Copy then Encode** - It's all in the name! (for more detailed explanation visit concepts)
+
 # To do:
-**Copy then Encode** - Output text file to output of FFmpeg when having multiple files.
+Nothing as of now.
